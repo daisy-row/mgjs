@@ -126,6 +126,7 @@ export function startApp(loadLanguage: LanguageLoader): void {
   let swapping = false;
   const marked = new Set<number>();
   let resignArmed = false;
+  let abandonArmed = false;         // New game, mid-game, asks twice as Resign does
   let thinking = false;               // a bot is choosing; the buttons wait
   let refused: string | null = null;  // the engine's answer to an illegal move
 
@@ -348,6 +349,7 @@ export function startApp(loadLanguage: LanguageLoader): void {
     swapping = false;
     marked.clear();
     resignArmed = false;
+    abandonArmed = false;
     refused = null;
     el('start').hidden = true;
     el('game').hidden = false;
@@ -396,6 +398,8 @@ export function startApp(loadLanguage: LanguageLoader): void {
     el<HTMLButtonElement>('swap').disabled = !yourTurn() || !state.canExchange || swapping;
     el<HTMLButtonElement>('resign').disabled = state.isOver || swapping || !yourTurn();
     el('resign').textContent = resignArmed ? 'Really resign?' : 'Resign';
+    el<HTMLButtonElement>('abandon').disabled = state.isOver || swapping;
+    el('abandon').textContent = abandonArmed ? 'Leave this game?' : 'New game';
     el('swap-row').hidden = !swapping;
 
     el('over').hidden = !state.isOver;
@@ -690,6 +694,7 @@ export function startApp(loadLanguage: LanguageLoader): void {
     swapping = false;
     marked.clear();
     resignArmed = false;
+    abandonArmed = false;
     save();
     draw();
     void runBots();
@@ -818,6 +823,19 @@ export function startApp(loadLanguage: LanguageLoader): void {
     move({ type: 'resign' });
   });
   el('again').addEventListener('click', () => {
+    remembered.game = null;
+    showStart();
+  });
+  /** A new game in the middle of one: the game in progress is dropped,
+   *  nothing is scored, and the start screen comes back with the picker. */
+  el('abandon').addEventListener('click', () => {
+    if (!abandonArmed) {
+      abandonArmed = true;
+      draw();
+      setTimeout(() => { abandonArmed = false; if (session) draw(); }, 4000);
+      return;
+    }
+    abandonArmed = false;
     remembered.game = null;
     showStart();
   });

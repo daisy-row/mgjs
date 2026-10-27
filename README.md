@@ -26,7 +26,8 @@ a square, or click a square and type — click it again to turn the arrow.
 **Enter** plays, **Esc** takes the tiles back, **Backspace** lifts the last
 tile. `Hint` lays out the best play the engine can find, as tiles you can
 still take back. `Swap…` puts tiles into the bag (it needs seven in there),
-`Pass` gives the turn away. A blank asks which letter it stands for; it spells
+`Pass` gives the turn away. `New game` drops the game in progress and goes back
+to the start screen, where the language picker is. A blank asks which letter it stands for; it spells
 but scores nothing. Reloading the page comes back to the same game.
 
 ### The two word lists
