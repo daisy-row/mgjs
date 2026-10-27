@@ -217,7 +217,7 @@ button.link { border: none; background: none; padding: 0; color: var(--accent); 
 .over h2 { margin-bottom: 6px; }
 
 /* The blank's letter */
-.blank { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); display: flex; align-items: center; justify-content: center; }
+.blank-sheet { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); display: flex; align-items: center; justify-content: center; }
 .blank-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; max-width: 420px; }
 .blank-letters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .blank-letters button { width: 34px; height: 34px; padding: 0; font-weight: 600; }
