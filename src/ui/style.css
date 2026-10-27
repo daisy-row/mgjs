@@ -1,0 +1,248 @@
+/* One sheet, no framework. Light and dark both come from the same handful of
+   custom properties, so a square's colour is stated once. */
+:root {
+  color-scheme: light dark;
+  --ink: #1b1b1b;
+  --ink-soft: #5a5a5a;
+  --page: #f6f4ef;
+  --panel: #fffdf8;
+  --line: #d9d4c7;
+  --board: #e8e3d6;
+  --tile: #f0d9a8;
+  --tile-ink: #2b2b2b;
+  --tile-edge: #c8ab73;
+  --fresh: #8d6b1f;
+  --dl: #bcd7e8;
+  --tl: #6fa3c4;
+  --dw: #e9b6a6;
+  --tw: #cf6a52;
+  --start: #d9c25a;
+  --accent: #1f6f4a;
+  --bad: #a5342a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #ece9e2;
+    --ink-soft: #a7a29a;
+    --page: #15171a;
+    --panel: #1d2024;
+    --line: #343a40;
+    --board: #262b31;
+    --tile: #d9bd84;
+    --tile-ink: #22242a;
+    --tile-edge: #8f7846;
+    --fresh: #f0d79a;
+    --dl: #2f4d60;
+    --tl: #3f7696;
+    --dw: #6c3f38;
+    --tw: #9c4536;
+    --start: #8a7530;
+    --accent: #5fbf90;
+    --bad: #e0776a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+/* `hidden` is a UA rule, so any author `display:` beats it — which is how the
+   blank-letter sheet, which is a flex box, came up on top of the first page
+   anyone loaded. State it once, loudly, rather than per element. */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+h1 { font-size: 19px; margin: 0; letter-spacing: 0.01em; }
+h2 { font-size: 17px; margin: 0 0 12px; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin: 18px 0 6px; }
+
+nav { display: flex; gap: 14px; font-size: 13px; }
+nav a, .link { color: var(--accent); text-decoration: none; }
+nav a:hover, .link:hover { text-decoration: underline; }
+
+main { padding: 20px; max-width: 1040px; margin: 0 auto; }
+footer { padding: 10px 20px 28px; color: var(--ink-soft); font-size: 12px; text-align: center; }
+
+/* Starting a game */
+#start { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; max-width: 540px; }
+.field { margin-bottom: 18px; }
+.field > label, .field > summary { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 6px; }
+input, select {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--page);
+  color: var(--ink);
+}
+input { width: 240px; }
+.note { color: var(--ink-soft); font-size: 12.5px; margin: 6px 0 0; max-width: 46em; }
+.opponent { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.opponent .blurb { color: var(--ink-soft); font-size: 12.5px; }
+.opponent button { border: none; background: none; color: var(--ink-soft); cursor: pointer; font-size: 15px; }
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: var(--ink-soft); }
+button:disabled { opacity: 0.45; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button.quiet { color: var(--ink-soft); }
+button.link { border: none; background: none; padding: 0; color: var(--accent); }
+
+/* The table: board on the left, everything else beside it */
+.table { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+
+.board {
+  --cell: clamp(22px, min(4.4vw, 5.6vh), 38px);
+  display: grid;
+  grid-template-columns: repeat(15, var(--cell));
+  gap: 2px;
+  padding: 6px;
+  background: var(--board);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.square {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 3px;
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--cell) * 0.3);
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.square.dl { background: var(--dl); }
+.square.tl { background: var(--tl); }
+.square.dw { background: var(--dw); }
+.square.tw { background: var(--tw); }
+.square.start { background: var(--start); }
+.square.cursor { outline: 2px solid var(--accent); outline-offset: -2px; }
+.square.cursor::after {
+  content: "→";
+  position: absolute;
+  right: 1px;
+  bottom: 0;
+  font-size: calc(var(--cell) * 0.3);
+  color: var(--accent);
+}
+.square.cursor.vertical::after { content: "↓"; }
+
+.square.tile, .rack .tile {
+  background: var(--tile);
+  color: var(--tile-ink);
+  border: 1px solid var(--tile-edge);
+  font-weight: 650;
+  font-size: calc(var(--cell) * 0.46);
+}
+.square.tile.fresh { box-shadow: inset 0 0 0 2px var(--fresh); }
+.square.tile.blank { font-style: italic; opacity: 0.86; }
+.square.tile.pending { border-style: dashed; border-color: var(--accent); }
+.square .value, .rack .tile .value {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: calc(var(--cell) * 0.26);
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+/* Scores and history */
+.beside { flex: 1 1 260px; min-width: 240px; }
+.players { list-style: none; margin: 0; padding: 0; }
+.players li { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+.players .who { font-weight: 600; }
+.players .meta { color: var(--ink-soft); font-size: 12.5px; }
+.players .score { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 650; }
+.players li.current .who::before { content: "▸ "; color: var(--accent); }
+.players li.winner .score { color: var(--accent); }
+.counts { color: var(--ink-soft); font-size: 12.5px; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.history { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow-y: auto; font-size: 13px; }
+.history li { display: flex; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+.history .n { color: var(--ink-soft); font-variant-numeric: tabular-nums; min-width: 1.8em; }
+.history .pts { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* The rack */
+.rack-row { margin-top: 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.rack { display: flex; gap: 6px; padding: 8px; background: var(--board); border: 1px solid var(--line); border-radius: 8px; }
+.rack .tile {
+  --cell: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.rack .tile.chosen { outline: 2px solid var(--accent); outline-offset: 1px; }
+.rack .tile.marked { opacity: 0.5; }
+.rack .empty { width: 40px; height: 40px; border: 1px dashed var(--line); border-radius: 4px; }
+.swap-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+
+.message { color: var(--ink-soft); min-height: 1.5em; margin: 12px 0 0; }
+.error { color: var(--bad); margin: 6px 0 0; }
+
+/* Game over */
+.over { margin-top: 18px; padding: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; max-width: 540px; }
+.over h2 { margin-bottom: 6px; }
+
+/* The blank's letter */
+.blank { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); display: flex; align-items: center; justify-content: center; }
+.blank-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; max-width: 420px; }
+.blank-letters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.blank-letters button { width: 34px; height: 34px; padding: 0; font-weight: 600; }
+
+/* How the bots were rated: one table per language, numbers in their own column
+   so a ladder can be read down. */
+.ladder { border-collapse: collapse; width: 100%; margin: 0 0 6px; font-size: 14px; }
+.ladder th, .ladder td { text-align: left; padding: 5px 12px 5px 0; border-bottom: 1px solid var(--line); }
+.ladder th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); font-weight: 600; }
+.ladder .n { text-align: right; font-variant-numeric: tabular-nums; }
+.ladder .exact, .ladder .say { color: var(--ink-soft); }
+.ladder .say { font-size: 12.5px; }
+.note code { font-size: 12.5px; }
+
+/* Added for the page that runs the whole game itself. */
+#loading { color: var(--ink-soft); padding: 40px 0; text-align: center; }
+.ladder-box { margin-top: 4px; }
+.ladder-box summary { cursor: pointer; }
+.ladder-box .ladder { margin-top: 8px; }
+.ladder .lvl { font-weight: 600; }
+.over .adjust { color: var(--ink-soft); font-size: 12.5px; margin: 4px 0 10px; }
+.players .meta.you { color: var(--accent); }
+header .sub { color: var(--ink-soft); font-size: 13px; }
+
+/* Attribution for the word lists: always on the page, in the footer. */
+footer .credits { max-width: 60em; margin: 10px auto 0; text-align: left; font-size: 12px; line-height: 1.5; }
+footer .credits p { margin: 4px 0; }
+footer a { color: var(--accent); }

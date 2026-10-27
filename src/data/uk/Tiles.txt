@@ -1,0 +1,40 @@
+# Ukrainian tiles: LETTER COUNT VALUE, the blank written _.
+# There is no Mattel Ukrainian edition; this is the "optimum" Ukrainian set
+# published in Wikipedia's Scrabble letter distributions, which is 104 tiles.
+# The apostrophe tile it includes is left out — the apostrophe is not a letter
+# of the alphabet and the word list has none — so the bag is 101 letters and
+# 2 blanks, 103 tiles.
+О 10 1
+А 8 1
+И 7 1
+Н 7 1
+Е 5 1
+І 5 1
+Т 5 1
+Р 5 1
+В 4 1
+К 4 2
+С 4 2
+М 4 2
+Д 3 2
+Л 3 2
+П 3 2
+У 3 3
+З 2 4
+Я 2 4
+Б 2 4
+Г 2 4
+Ч 1 5
+Х 1 5
+Й 1 5
+Ь 1 5
+Ж 1 6
+Ї 1 6
+Ц 1 6
+Ш 1 6
+Ю 1 7
+Є 1 8
+Ф 1 8
+Щ 1 8
+Ґ 1 10
+_ 2 0

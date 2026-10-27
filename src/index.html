@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matrix Game</title>
+<meta name="description" content="The Matrix Game: a 15×15 letter game against bots, played entirely in the browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23f0d9a8'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='18' fill='%232b2b2b'%3EM%3C/text%3E%3C/svg%3E">
+<style>
+/*STYLE*/
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Matrix Game</h1>
+  <span class="sub" id="subtitle">against bots, in your browser — nothing leaves this page</span>
+</header>
+
+<main>
+  <p id="loading">Loading the word list…</p>
+
+  <!-- Starting a game. -->
+  <section id="start" hidden>
+    <h2>New game</h2>
+    <div class="field">
+      <label for="name">Your name</label>
+      <input id="name" maxlength="24" placeholder="You" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="language">Language</label>
+      <select id="language"></select>
+      <p class="note" id="language-note"></p>
+    </div>
+    <div class="field">
+      <label>Opponents</label>
+      <div id="opponents"></div>
+      <button type="button" id="add-opponent" class="link">Add opponent</button>
+    </div>
+    <details class="field">
+      <summary>Advanced</summary>
+      <label for="seed">Seed</label>
+      <input id="seed" placeholder="random" autocomplete="off" inputmode="numeric">
+      <p class="note">Same seed, same tiles.</p>
+    </details>
+    <button type="button" id="begin" class="primary">Start</button>
+    <p class="error" id="start-error" hidden></p>
+    <details class="field ladder-box">
+      <summary>How the bots were rated</summary>
+      <p class="note" id="ladder-note"></p>
+      <table class="ladder" id="ladder"></table>
+    </details>
+  </section>
+
+  <!-- Playing one. -->
+  <section id="game" hidden>
+    <div class="table">
+      <div id="board" class="board" role="grid" aria-label="Board"></div>
+      <div class="beside">
+        <ol id="players" class="players"></ol>
+        <p class="counts"><span id="bag"></span> · <span id="turn"></span></p>
+        <div class="buttons">
+          <button type="button" id="play" class="primary">Play</button>
+          <button type="button" id="clear">Take back</button>
+          <button type="button" id="hint">Hint</button>
+          <button type="button" id="swap">Swap…</button>
+          <button type="button" id="pass">Pass</button>
+          <button type="button" id="resign" class="quiet">Resign</button>
+        </div>
+        <p class="note">Click a tile, then a square. Or click a square and type;
+          click it again to turn the arrow. <b>Enter</b> plays,
+          <b>Esc</b> takes the tiles back, <b>Backspace</b> lifts the last one.</p>
+        <h3>Turns</h3>
+        <ol id="history" class="history"></ol>
+      </div>
+    </div>
+
+    <div class="rack-row">
+      <div id="rack" class="rack" aria-label="Your tiles"></div>
+      <div id="swap-row" class="swap-row" hidden>
+        <span>Pick the tiles to put back.</span>
+        <button type="button" id="swap-go" class="primary">Swap these</button>
+        <button type="button" id="swap-cancel">Never mind</button>
+      </div>
+    </div>
+
+    <p class="message" id="message"></p>
+    <p class="error" id="error" hidden></p>
+
+    <div id="over" class="over" hidden>
+      <h2 id="over-title"></h2>
+      <p id="over-detail"></p>
+      <p class="adjust" id="over-adjust"></p>
+      <button type="button" id="again" class="primary">New game</button>
+    </div>
+  </section>
+</main>
+
+<!-- Which letter a blank stands for. -->
+<div id="blank" class="blank" hidden>
+  <div class="blank-card">
+    <h3>The blank stands for…</h3>
+    <div id="blank-letters" class="blank-letters"></div>
+    <button type="button" id="blank-cancel">Never mind</button>
+  </div>
+</div>
+
+<footer>
+  <p id="footer-note"></p>
+  <div class="credits">
+    <p><b>Word lists.</b> English: <a href="https://web.archive.org/web/20090122025747/http://personal.riverusers.com/~thegrendel/software.html">ENABLE</a>, public domain.</p>
+    <p id="credit-uk">Ukrainian: forms from
+      <a href="https://github.com/brown-uk/dict_uk">ВЕСУМ / dict_uk</a> 6.8.6 by
+      Andriy Rysin, Vasyl Starko and the BrUK team — Rysin, A., Starko, V.
+      <i>Large Electronic Dictionary of Ukrainian (VESUM)</i>, 2005–2026,
+      <a href="https://vesum.nlp.net.ua/">vesum.nlp.net.ua</a>. Taken from its
+      <a href="https://github.com/brown-uk/dict_uk/tree/master/distr/hunspell">hunspell build</a>
+      (<a href="https://www.mozilla.org/MPL/1.1/">MPL 1.1</a>); the dictionary data are published under
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>,
+      © Andriy Rysin, Vasyl Starko, BrUK team. Changed here: every form the hunspell dictionary
+      accepts was generated and compiled into one list of 2,746,623 lowercase words of 2 to 15 letters
+      without apostrophes, with Zipf frequencies attached; that list is offered under the same licence
+      as its source.</p>
+  </div>
+</footer>
+<script>
+/*SCRIPT*/
+</script>
+</body>
+</html>

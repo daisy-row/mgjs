@@ -1,0 +1,20 @@
+Ukrainian word list: ВЕСУМ / dict_uk 6.8.6, by Andriy Rysin, Vasyl Starko and
+the BrUK team — https://github.com/brown-uk/dict_uk (release v6.8.6).
+Citation requested by the authors:
+  Rysin, A., Starko, V. Large Electronic Dictionary of Ukrainian (VESUM).
+  2005-2026. Available at: https://vesum.nlp.net.ua/
+
+Licences, as stated by the project:
+  - the dictionary data: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+    International, https://creativecommons.org/licenses/by-nc-sa/4.0/
+    © Andriy Rysin, Vasyl Starko, BrUK team
+  - the hunspell build in distr/hunspell, which is what Words.lex.gz was made
+    from: Mozilla Public License 1.1, https://www.mozilla.org/MPL/1.1/
+  - the project's software: GPL-3.0-or-later (none of it is used here)
+
+What was changed: every form the hunspell dictionary accepts was generated
+(matrix-game-next-gen, Scripts/build-language.py), capitalised entries were
+dropped, forms of 2 to 15 letters without apostrophes were kept, Zipf
+frequencies from wordfreq were attached, and the result was compiled into
+Words.lex.gz (2,746,623 forms). That compiled list is distributed under the
+same terms as its source, and the game's page carries this attribution.
